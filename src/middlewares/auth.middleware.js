@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
-const JWT_EXPIRATION = process.env.JWT_EXPIRATION || "1h";
+// const JWT_EXPIRATION = process.env.JWT_EXPIRATION || "1h";
 
 export const verifyToken = (req, res, next) => {
     const token = req.header("Authorization")?.split(" ")[1];
