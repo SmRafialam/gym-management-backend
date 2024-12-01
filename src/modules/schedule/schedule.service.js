@@ -43,13 +43,30 @@ const bookClass = async (traineeIds, scheduleId) => {
         return schedule.save();
     }
 
-    // const getScheduleDetails = async (scheduleId) => {
-    //     const schedule = await ClassSchedule.findById(scheduleId)
-    //         .populate('trainerId') // Populate trainer details
-    //         .populate('traineeIds'); // Populate trainee details
+const assignTrainer = async (scheduleId, trainerId) => {
+        try {
+            const schedule = await ClassSchedule.findById(scheduleId);
+            if (!schedule) {
+                throw new Error('Schedule not found');
+            }
     
-    //     return schedule;
-    // };
-    
+            const trainer = await User.findOne({ _id: trainerId, role: 'Trainer' });
 
-export const ScheduleService = { createSchedule, bookClass };
+            if (!trainer) {
+                throw new Error('Trainer not found');
+            }
+
+            if (schedule.trainerId) {
+                throw new Error("Schedule already has a trainer assigned.");
+
+            }
+    
+            schedule.trainerId = trainerId;
+            await schedule.save();
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+export const ScheduleService = { createSchedule, bookClass, assignTrainer };
